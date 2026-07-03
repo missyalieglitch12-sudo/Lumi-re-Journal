@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumière Journal</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts for luxurious aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Dancing+Script&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Parisienne&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&family=Quicksand:wght@300..700&family=Sacramento&display=swap" rel="stylesheet">
+    <!-- Feather Icons for minimalistic icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>Lumière</h1>
+                <span class="subtitle">Journal</span>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-view="home"><i data-feather="home"></i> Home</li>
+                <li data-view="notes"><i data-feather="edit-3"></i> Notes</li>
+                <li data-view="lists"><i data-feather="check-square"></i> Lists</li>
+                <li data-view="recordings"><i data-feather="mic"></i> Recordings</li>
+                <li data-view="calendar"><i data-feather="calendar"></i> Calendar</li>
+                <li data-view="archive"><i data-feather="archive"></i> Archive</li>
+            </ul>
+            <div class="sidebar-footer">
+                <ul class="nav-links">
+                    <li data-view="settings"><i data-feather="settings"></i> Settings</li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content" id="main-content">
+            <!-- Dynamic Content Injected Here -->
+        </main>
+    </div>
+
+    <!-- View Templates -->
+    <template id="view-home">
+        <header class="view-header">
+            <div>
+                <h2 class="date-display" id="today-date">Today</h2>
+            </div>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <i data-feather="search"></i>
+                    <input type="text" id="global-search-input" placeholder="Search entries...">
+                </div>
+                <button class="btn-primary" id="btn-quick-add"><i data-feather="plus"></i></button>
+            </div>
+        </header>
+        <div class="home-grid">
+            <section class="home-section calendar-preview">
+                <h3>Calendar Preview</h3>
+                <div class="placeholder-box">Mini Calendar will go here</div>
+            </section>
+            <section class="home-section recent-notes">
+                <h3>Recent Notes</h3>
+                <div class="placeholder-box" id="home-recent-notes">No recent notes</div>
+            </section>
+            <section class="home-section recent-lists">
+                <h3>Recent Lists</h3>
+                <div class="placeholder-box" id="home-recent-lists">No recent lists</div>
+            </section>
+            <section class="home-section recent-recordings">
+                <h3>Recent Recordings</h3>
+                <div class="placeholder-box" id="home-recent-recordings">No recent recordings</div>
+            </section>
+        </div>
+    </template>
+
+    <template id="view-notes">
+        <header class="view-header">
+            <div>
+                <h2 class="date-display">Notes</h2>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary" id="btn-new-note" title="New Note"><i data-feather="plus"></i></button>
+            </div>
+        </header>
+        <div class="notes-grid" id="notes-grid">
+            <!-- Notes cards injected here -->
+        </div>
+    </template>
+
+    <template id="view-note-editor">
+        <header class="view-header">
+            <div class="header-actions">
+                <button class="btn-secondary" id="btn-back-notes"><i data-feather="arrow-left"></i> Back</button>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary" id="btn-delete-note" style="color: #ff6b6b; border-color: #ff6b6b;" title="Delete Note"><i data-feather="trash-2"></i></button>
+                <button class="btn-secondary" id="btn-save-note"><i data-feather="save"></i> Save</button>
+            </div>
+        </header>
+        <div class="editor-container">
+            <input type="text" id="note-title-input" class="note-title-input" placeholder="Note Title...">
+            <div class="editor-toolbar">
+                <button title="Bold"><i data-feather="bold"></i></button>
+                <button title="Italic"><i data-feather="italic"></i></button>
+                <button title="Underline"><i data-feather="underline"></i></button>
+                <div class="toolbar-divider"></div>
+                <select id="note-font-selector" class="bg-selector" title="Font">
+                    <option value="default">Default Font</option>
+                    <option value="'Arial', sans-serif">Arial</option>
+                    <option value="'Bubblegum Sans', cursive">Bubble Cursive</option>
+                    <option value="'Playfair Display', serif">Playfair Display</option>
+                    <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                    <option value="'Parisienne', cursive">Parisienne</option>
+                    <option value="'Poppins', sans-serif">Poppins</option>
+                    <option value="'Quicksand', sans-serif">Quicksand</option>
+                    <option value="'Sacramento', cursive">Sacramento</option>
+                    <option value="'Dancing Script', cursive">Dancing Script</option>
+                    <option value="'Libre Baskerville', serif">Libre Baskerville</option>
+                </select>
+                <div class="toolbar-divider"></div>
+                <button title="Image" id="btn-insert-image"><i data-feather="image"></i></button>
+                <input type="file" id="note-image-input" style="display:none;" accept="image/*">
+                <div class="toolbar-divider"></div>
+                <button title="Stickers" id="btn-toggle-stickers"><i data-feather="smile"></i></button>
+                <div class="toolbar-divider"></div>
+                <select id="note-bg-selector" class="bg-selector" title="Background">
+                    <option value="default">Classic Ivory</option>
+                    <option value="linen">Vintage Linen</option>
+                    <option value="dark">Midnight Black</option>
+                    <option value="plaid">Plaid</option>
+                    <option value="watercolor">Watercolor</option>
+                    <option value="custom">Custom Upload...</option>
+                </select>
+                <input type="file" id="note-bg-input" style="display:none;" accept="image/*">
+                <input type="range" id="note-bg-opacity" min="0" max="1" step="0.1" value="1" style="width: 60px; margin-left: 5px;" title="Background Opacity">
+            </div>
+            
+            <div class="sticker-panel" id="sticker-panel" style="display: none;">
+                <span class="sticker-emoji" draggable="true">🎀</span>
+                <span class="sticker-emoji" draggable="true">☕</span>
+                <span class="sticker-emoji" draggable="true">⭐</span>
+                <span class="sticker-emoji" draggable="true">❤️</span>
+                <span class="sticker-emoji" draggable="true">📖</span>
+                <span class="sticker-emoji" draggable="true">🕰️</span>
+                <span class="sticker-emoji" draggable="true">✒️</span>
+                <span class="sticker-emoji" draggable="true">🌸</span>
+                <button id="btn-upload-sticker" class="btn-secondary" style="padding:4px; margin-left: 10px;" title="Upload Sticker"><i data-feather="upload"></i></button>
+                <input type="file" id="sticker-upload-input" style="display:none;" accept="image/*">
+            </div>
+
+            <div contenteditable="true" id="note-content-input" class="note-content-input" placeholder="Start writing your luxurious thoughts..."></div>
+            
+            <div id="image-manipulation-toolbar" class="image-toolbar" style="display: none;">
+                <button id="img-tool-bigger" title="Bigger"><i data-feather="zoom-in"></i></button>
+                <button id="img-tool-smaller" title="Smaller"><i data-feather="zoom-out"></i></button>
+                <button id="img-tool-rotate-left" title="Rotate Left"><i data-feather="rotate-ccw"></i></button>
+                <button id="img-tool-rotate-right" title="Rotate Right"><i data-feather="rotate-cw"></i></button>
+                <button id="img-tool-delete" title="Delete" style="color: #ff6b6b;"><i data-feather="trash-2"></i></button>
+            </div>
+        </div>
+    </template>
+
+    <template id="view-lists">
+        <header class="view-header">
+            <div>
+                <h2 class="date-display">Lists</h2>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary" id="btn-new-list" title="New List"><i data-feather="plus"></i></button>
+            </div>
+        </header>
+        <div class="notes-grid" id="lists-grid">
+            <!-- Lists cards injected here -->
+        </div>
+    </template>
+
+    <template id="view-list-editor">
+        <header class="view-header">
+            <div class="header-actions">
+                <button class="btn-secondary" id="btn-back-lists"><i data-feather="arrow-left"></i> Back</button>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary" id="btn-delete-list" style="color: #ff6b6b; border-color: #ff6b6b;" title="Delete List"><i data-feather="trash-2"></i></button>
+                <button class="btn-secondary" id="btn-save-list"><i data-feather="save"></i> Save</button>
+            </div>
+        </header>
+        <div class="editor-container" id="list-editor-container">
+            <input type="text" id="list-title-input" class="note-title-input" placeholder="List Title...">
+            <div class="list-items-container" id="list-items-container">
+                <!-- List items injected here -->
+            </div>
+            <button class="btn-secondary" id="btn-add-list-item" style="margin-top: 1rem; align-self: flex-start;"><i data-feather="plus"></i> Add Item</button>
+        </div>
+    </template>
+
+    <template id="view-calendar">
+        <header class="view-header">
+            <div>
+                <h2 class="date-display" id="calendar-month-year">Month Year</h2>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary" id="btn-prev-month"><i data-feather="chevron-left"></i></button>
+                <button class="btn-secondary" id="btn-next-month"><i data-feather="chevron-right"></i></button>
+            </div>
+        </header>
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- Days injected here -->
+            </div>
+        </div>
+    </template>
+
+    <template id="view-recordings">
+        <header class="view-header">
+            <div>
+                <h2 class="date-display">Voice Recordings</h2>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary" id="btn-record" style="background-color: var(--clr-rose-gold);" title="Start Recording"><i data-feather="mic"></i></button>
+            </div>
+        </header>
+        
+        <div class="recording-status" id="recording-status" style="display: none;">
+            <div class="pulsing-dot"></div> Recording in progress...
+            <button class="btn-secondary" id="btn-stop-recording" style="margin-left: 1rem;"><i data-feather="square"></i> Stop</button>
+        </div>
+
+        <div class="notes-grid" id="recordings-grid" style="margin-top: 2rem;">
+            <!-- Recordings injected here -->
+        </div>
+    </template>
+
+    <template id="view-search">
+        <header class="view-header">
+            <div>
+                <h2 class="date-display">Search Results</h2>
+            </div>
+        </header>
+        <div class="search-results-container" id="search-results-container">
+            <!-- Results injected here -->
+        </div>
+    </template>
+
+    <template id="view-settings">
+        <header class="view-header">
+            <div>
+                <h2 class="date-display">Settings</h2>
+            </div>
+        </header>
+        <div class="settings-container" style="background: var(--clr-ivory); padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--shadow-soft);">
+            <div style="margin-bottom: 2rem;">
+                <h3>Appearance</h3>
+                <p style="color: #666; margin-bottom: 1rem;">Customize the overall look of Lumière Journal.</p>
+                <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--clr-beige); padding-bottom: 1rem;">
+                    <span>Dark Mode (Luxury Black & Gold)</span>
+                    <input type="checkbox" id="setting-dark-mode" style="width: 20px; height: 20px; accent-color: var(--clr-rose-gold);">
+                </div>
+            </div>
+            
+            <div>
+                <h3>Typography</h3>
+                <p style="color: #666; margin-bottom: 1rem;">Set the default font for your notes and lists.</p>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span>Default Global Font</span>
+                    <select id="setting-default-font" class="bg-selector">
+                        <option value="'Poppins', sans-serif">Poppins (Default)</option>
+                        <option value="'Arial', sans-serif">Arial</option>
+                        <option value="'Bubblegum Sans', cursive">Bubble Cursive</option>
+                        <option value="'Playfair Display', serif">Playfair Display</option>
+                        <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                        <option value="'Parisienne', cursive">Parisienne</option>
+                        <option value="'Quicksand', sans-serif">Quicksand</option>
+                        <option value="'Sacramento', cursive">Sacramento</option>
+                        <option value="'Dancing Script', cursive">Dancing Script</option>
+                        <option value="'Libre Baskerville', serif">Libre Baskerville</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="app.js"></script>
+</body>
+</html>
