@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRUTALIST WORKSPACE — Notes, Lists & Audio</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&family=Permanent+Marker&family=Space+Grotesk:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app-container">
+    
+    <!-- HEADER BAR / DESKTOP PANEL -->
+    <header class="neo-header">
+      <div class="header-logo">
+        <h1 class="logo-text">BRUTALIST WORKSPACE</h1>
+        <p class="logo-sub">NO-FUSS NOTES. SOLID STORAGE.</p>
+      </div>
+      
+      <!-- Live Clock & Date -->
+      <div class="header-clock neo-box">
+        <span id="live-time">00:00:00</span>
+        <span id="live-date">MON, JAN 01, 2026</span>
+      </div>
+
+      <!-- Desktop OS Taskbar to Toggle Windows -->
+      <div class="desktop-taskbar neo-box">
+        <span class="taskbar-label">WINDOWS:</span>
+        <button id="toggle-calendar-btn" class="neo-btn taskbar-btn active" title="Toggle Calendar Window">
+          📅 CALENDAR
+        </button>
+        <button id="toggle-editor-btn" class="neo-btn taskbar-btn active" title="Toggle Note Editor Window">
+          📝 EDITOR
+        </button>
+        <button id="toggle-archive-btn" class="neo-btn taskbar-btn active" title="Toggle Archive Window">
+          📁 ARCHIVE
+        </button>
+      </div>
+
+      <!-- Mascot Widget -->
+      <div class="mascot-widget neo-box">
+        <div class="mascot-screen">
+          <div class="mascot-face" id="mascot-face">(•‿•)</div>
+        </div>
+        <div class="mascot-status">
+          <span class="status-indicator active"></span>
+          <span id="mascot-status-text">SYSTEM: IDLE</span>
+        </div>
+      </div>
+      
+      <!-- Theme & Audio Controls -->
+      <div class="header-controls">
+        <button id="synth-sound-toggle" class="neo-btn toggle-btn active" title="Toggle Synthesizer Sound Effects">
+          🔊 SOUNDS
+        </button>
+        <button id="dark-theme-toggle" class="neo-btn toggle-btn" title="Toggle Workspace Contrast Mode">
+          🌓 CONTRAST
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN GRID LAYOUT -->
+    <main class="neo-grid">
+      
+      <!-- LEFT WINDOW: CALENDAR -->
+      <section id="window-calendar" class="panel panel-left neo-box">
+        <!-- Window Titlebar -->
+        <div class="window-header">
+          <span class="window-title">📅 CALENDAR LINK</span>
+          <button class="window-close-btn" data-target="calendar" title="Close Window">×</button>
+        </div>
+        
+        <div class="window-content">
+          <div class="calendar-wrapper">
+            <!-- Calendar Header -->
+            <div class="calendar-controls">
+              <button id="prev-month" class="neo-btn mini-btn">&lt;</button>
+              <div class="calendar-title-selectors">
+                <select id="calendar-month-select" class="neo-select"></select>
+                <select id="calendar-year-select" class="neo-select"></select>
+              </div>
+              <button id="next-month" class="neo-btn mini-btn">&gt;</button>
+            </div>
+            
+            <!-- Calendar Days Header -->
+            <div class="calendar-days-header">
+              <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+            </div>
+            
+            <!-- Calendar Grid -->
+            <div id="calendar-grid" class="calendar-grid"></div>
+          </div>
+
+          <div class="calendar-details neo-box">
+            <div class="selected-day-info">
+              <span class="label">SELECTED DATE</span>
+              <span id="current-selected-date" class="date-value">Select a day</span>
+            </div>
+            <div class="selected-day-actions">
+              <button id="add-note-for-day" class="neo-btn action-btn w-100">
+                ➕ ADD NOTE TO DAY
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CENTER WINDOW: ACTIVE WORKSPACE / EDITOR -->
+      <section id="window-editor" class="panel panel-center">
+        <div class="editor-container neo-box" id="editor-container">
+          
+          <!-- Window Titlebar -->
+          <div class="window-header">
+            <span class="window-title">📝 ACTIVE NOTE WORKSPACE</span>
+            <button class="window-close-btn" data-target="editor" title="Close Window">×</button>
+          </div>
+
+          <div class="window-content flex-column-content">
+            <!-- Note Metadata / Toolbar -->
+            <div class="editor-toolbar">
+              <div class="note-meta-row">
+                <input type="text" id="note-title-input" placeholder="Untitled Note..." class="neo-input title-input">
+                <div class="save-status-badge" id="save-status">Draft</div>
+              </div>
+              
+              <!-- Type Selector Tabs -->
+              <div class="editor-tabs">
+                <button class="editor-tab active neo-btn" data-type="text">📝 NOTEPAD</button>
+                <button class="editor-tab neo-btn" data-type="list">☑️ CHECKLIST</button>
+                <button class="editor-tab neo-btn" data-type="audio">🎙️ VOICE REC</button>
+              </div>
+
+              <!-- Stylist Bar -->
+              <div class="editor-style-bar">
+                <button id="bg-studio-btn" class="neo-btn mini-btn">🖼️ BACKGROUND</button>
+                <button id="sticker-studio-btn" class="neo-btn mini-btn">🪄 STICKERS</button>
+                <!-- Paper Pattern Dropdown -->
+                <div class="style-select-wrapper">
+                  <label for="paper-style-select">PAPER:</label>
+                  <select id="paper-style-select" class="neo-select">
+                    <option value="blank">Blank</option>
+                    <option value="lined">Lined</option>
+                    <option value="grid">Grid</option>
+                    <option value="dot">Dot Grid</option>
+                  </select>
+                </div>
+
+                <!-- Font Dropdown -->
+                <div class="style-select-wrapper">
+                  <label for="font-select">FONT:</label>
+                  <select id="font-select" class="neo-select">
+                    <option value="font-lexend">Lexend</option>
+                    <option value="font-grotesk">Space Grotesk</option>
+                    <option value="font-mono">Space Mono</option>
+                    <option value="font-arial">Arial</option>
+                    <option value="font-times">Times New Roman</option>
+                    <option value="font-comic">Comic Neue</option>
+                    <option value="font-impact">Impact</option>
+                    <option value="font-marker">Handwritten</option>
+                  </select>
+                </div>
+
+                <!-- Sticky Note Colors (Tints of #0000ff) -->
+                <div class="color-picker">
+                  <button class="color-btn active" data-color="#e5e5ff" style="background-color: #e5e5ff;" title="Ultra Light Blue"></button>
+                  <button class="color-btn" data-color="#ccccff" style="background-color: #ccccff;" title="Soft Blue"></button>
+                  <button class="color-btn" data-color="#b2b2ff" style="background-color: #b2b2ff;" title="Light Blue"></button>
+                  <button class="color-btn" data-color="#7f7fff" style="background-color: #7f7fff;" title="Medium Blue"></button>
+                  <button class="color-btn" data-color="#4c4cff" style="background-color: #4c4cff;" title="Electric Blue"></button>
+                  <button class="color-btn" data-color="#0000ff" style="background-color: #0000ff;" title="Pure Blue"></button>
+                  <button class="color-btn" data-color="#ffffff" style="background-color: #ffffff;" title="White Paper"></button>
+                </div>
+              </div>
+
+              <!-- Date Link controls -->
+              <div class="date-link-bar neo-box">
+                <label class="neo-checkbox-container">
+                  <input type="checkbox" id="link-to-date-chk">
+                  <span class="custom-checkbox"></span>
+                  LINK TO CALENDAR
+                </label>
+                <div id="date-link-pickers" class="date-link-pickers hidden">
+                  <input type="date" id="note-date-picker" class="neo-input mini-input">
+                  <input type="time" id="note-time-picker" class="neo-input mini-input">
+                </div>
+              </div>
+            </div>
+
+            <!-- THE CANVAS (NOTE PAPER) -->
+            <div class="editor-paper paper-blank font-lexend" id="editor-paper" style="background-color: #e5e5ff;">
+              
+              <!-- TEXT EDITOR -->
+              <div class="editor-view" id="view-text">
+                <textarea id="note-textarea" placeholder="Start writing something awesome here..."></textarea>
+              </div>
+
+              <!-- CHECKLIST EDITOR -->
+              <div class="editor-view hidden" id="view-list">
+                <div class="checklist-builder">
+                  <div class="checklist-add-row">
+                    <input type="text" id="checklist-new-item" class="neo-input text-item-input" placeholder="Add new task...">
+                    <button id="checklist-add-btn" class="neo-btn action-btn">ADD</button>
+                  </div>
+                  <div id="checklist-items" class="checklist-items-container">
+                    <!-- Checklist items injected dynamically -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- VOICE RECORDER EDITOR -->
+              <div class="editor-view hidden" id="view-audio">
+                <div class="recorder-console">
+                  <!-- Cassette SVG -->
+                  <div class="cassette-container neo-box">
+                    <div class="cassette">
+                      <div class="cassette-label">
+                        <span class="cassette-title" id="cassette-label-title">VOICE MEMO</span>
+                      </div>
+                      <div class="cassette-spools">
+                        <div class="spool left-spool" id="left-spool">
+                          <div class="spool-spoke"></div><div class="spool-spoke"></div><div class="spool-spoke"></div>
+                        </div>
+                        <div class="spool-window">
+                          <div class="tape-roll" id="tape-roll"></div>
+                        </div>
+                        <div class="spool right-spool" id="right-spool">
+                          <div class="spool-spoke"></div><div class="spool-spoke"></div><div class="spool-spoke"></div>
+                        </div>
+                      </div>
+                      <div class="cassette-bottom"></div>
+                    </div>
+                  </div>
+
+                  <!-- Timer & Status -->
+                  <div class="recorder-status-row">
+                    <div class="rec-timer" id="recording-timer">00:00</div>
+                    <div class="rec-state-tag" id="recording-state">READY TO RECORD</div>
+                  </div>
+
+                  <!-- Live Audio Visualizer -->
+                  <div class="visualizer-container neo-box">
+                    <canvas id="audio-visualizer"></canvas>
+                  </div>
+
+                  <!-- Recorder Controls -->
+                  <div class="recorder-controls">
+                    <!-- Record Button -->
+                    <button id="rec-btn" class="neo-btn recorder-btn rec-action" title="Start Recording">
+                      <span class="rec-icon"></span> REC
+                    </button>
+                    <!-- Stop Button -->
+                    <button id="stop-btn" class="neo-btn recorder-btn stop-action disabled" disabled title="Stop Current Operation">
+                      <span class="stop-icon"></span> STOP
+                    </button>
+                  </div>
+
+                  <!-- Custom Audio Playback Player -->
+                  <div class="custom-player neo-box hidden" id="audio-player-container">
+                    <div class="player-left">
+                      <button id="player-play-btn" class="neo-btn mini-btn" title="Play/Pause">▶</button>
+                    </div>
+                    <div class="player-center">
+                      <input type="range" id="player-progress" min="0" max="100" value="0" class="player-slider">
+                      <div class="player-time-row">
+                        <span id="player-current-time">0:00</span>
+                        <span id="player-duration">0:00</span>
+                      </div>
+                    </div>
+                    <!-- Delete mistakes/audio memo button -->
+                    <button id="discard-audio-btn" class="neo-btn mini-btn danger-btn" title="Delete current audio memo">🗑️ DELETE MEMO</button>
+                  </div>
+                </div>
+              </div>
+
+            </div> <!-- END OF THE CANVAS -->
+
+            <!-- Active Note Actions -->
+            <div class="editor-footer">
+              <button id="save-note-btn" class="neo-btn action-btn success-btn">
+                💾 SAVE ENTRY
+              </button>
+              <button id="delete-active-note-btn" class="neo-btn action-btn danger-btn">
+                🗑️ DELETE ENTRY
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT WINDOW: ARCHIVE BROWSER -->
+      <section id="window-archive" class="panel panel-right neo-box">
+        <!-- Window Titlebar -->
+        <div class="window-header">
+          <span class="window-title">📁 ALL ENTRIES</span>
+          <button class="window-close-btn" data-target="archive" title="Close Window">×</button>
+        </div>
+
+        <div class="window-content">
+          <!-- Search & Filter Controls -->
+          <div class="archive-controls neo-box">
+            <input type="text" id="archive-search" class="neo-input search-input" placeholder="Search title or text...">
+            
+            <!-- Category Filter Tabs -->
+            <div class="archive-tabs">
+              <button class="archive-filter-btn active neo-btn mini-btn" data-filter="all">ALL</button>
+              <button class="archive-filter-btn neo-btn mini-btn" data-filter="text">📝 TEXT</button>
+              <button class="archive-filter-btn neo-btn mini-btn" data-filter="list">☑️ LIST</button>
+              <button class="archive-filter-btn neo-btn mini-btn" data-filter="audio">🎙️ AUD</button>
+            </div>
+
+            <!-- Date Link Filter Dropdown -->
+            <div class="archive-sub-controls">
+              <select id="archive-date-filter" class="neo-select">
+                <option value="all">Any Date / No Date</option>
+                <option value="calendar">Linked to Calendar</option>
+                <option value="dateless">No Calendar Link (Inbox)</option>
+              </select>
+
+              <select id="archive-sort" class="neo-select">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="alphabetical">A - Z</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Archive List Container -->
+          <div class="archive-list-wrapper">
+            <button id="create-new-blank-btn" class="neo-btn create-btn w-100">
+              ➕ NEW BLANK ENTRY
+            </button>
+            <div id="archive-list" class="archive-list">
+              <!-- Dynamic entries injected here -->
+              <div class="empty-state">No entries found. Let's create one!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Background Studio Modal -->
+  <div id="bg-studio-modal" class="neo-modal hidden">
+    <div class="neo-modal-content neo-box">
+      <div class="window-header">
+        <span class="window-title">🖼️ BACKGROUND STUDIO</span>
+        <button class="window-close-btn" id="close-bg-modal" title="Close">×</button>
+      </div>
+      <div class="bg-modal-tabs">
+        <button class="bg-tab-btn active" data-tab="colors">COLORS</button>
+        <button class="bg-tab-btn" data-tab="patterns">PATTERNS</button>
+        <button class="bg-tab-btn" data-tab="images">IMAGES</button>
+      </div>
+      <div class="bg-modal-body">
+        <div class="bg-tab-content active" id="bg-tab-colors">
+          <input type="color" id="custom-color-picker" class="neo-input" title="Custom Color" style="height: 40px; margin-bottom: 10px;">
+          <div class="color-picker" id="modal-color-picker">
+             <!-- Swatches cloned from UI by JS, or just use the old ones for now -->
+          </div>
+        </div>
+        <div class="bg-tab-content hidden" id="bg-tab-patterns">
+          <div class="pattern-grid" id="pattern-grid">
+            <button class="pattern-btn" data-pattern="none">NONE</button>
+            <button class="pattern-btn pattern-botanical" data-pattern="botanical" title="Botanical Garden"></button>
+            <button class="pattern-btn pattern-palms" data-pattern="palms" title="Pink Palms"></button>
+            <button class="pattern-btn pattern-diagonal" data-pattern="diagonal"></button>
+            <button class="pattern-btn pattern-check" data-pattern="check"></button>
+            <button class="pattern-btn pattern-polka" data-pattern="polka"></button>
+            <button class="pattern-btn pattern-herringbone" data-pattern="herringbone"></button>
+            <button class="pattern-btn pattern-diamond" data-pattern="diamond"></button>
+            <button class="pattern-btn pattern-crosshatch" data-pattern="crosshatch"></button>
+            <button class="pattern-btn pattern-wavy" data-pattern="wavy"></button>
+            <button class="pattern-btn pattern-zigzag" data-pattern="zigzag"></button>
+          </div>
+        </div>
+        <div class="bg-tab-content hidden" id="bg-tab-images">
+          <button id="upload-bg-image-btn" class="neo-btn action-btn w-100">UPLOAD PHOTO</button>
+          <input type="file" id="bg-image-upload" accept="image/*" class="hidden">
+          <div class="image-gallery-grid" id="image-gallery-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticker Studio Modal -->
+  <div id="sticker-modal" class="neo-modal hidden">
+    <div class="neo-modal-content neo-box">
+      <div class="window-header">
+        <span class="window-title">🪄 STICKER LIBRARY</span>
+        <button class="window-close-btn" id="close-sticker-modal" title="Close">×</button>
+      </div>
+      <div class="bg-modal-tabs">
+        <button class="sticker-tab-btn active" data-tab="pixel">PIXEL</button>
+        <button class="sticker-tab-btn" data-tab="cottage">COTTAGE</button>
+        <button class="sticker-tab-btn" data-tab="vintage">VINTAGE</button>
+        <button class="sticker-tab-btn" data-tab="custom">MY STICKERS</button>
+      </div>
+      <div class="bg-modal-body">
+        <div class="sticker-tab-content active" id="sticker-tab-pixel">
+          <div class="sticker-emoji-grid">
+            <span class="emoji-sticker-item">🌟</span><span class="emoji-sticker-item">🎮</span><span class="emoji-sticker-item">👾</span><span class="emoji-sticker-item">🕹️</span><span class="emoji-sticker-item">💎</span><span class="emoji-sticker-item">🔥</span><span class="emoji-sticker-item">⚡</span><span class="emoji-sticker-item">💻</span><span class="emoji-sticker-item">💡</span>
+          </div>
+        </div>
+        <div class="sticker-tab-content hidden" id="sticker-tab-cottage">
+          <div class="sticker-emoji-grid">
+            <span class="emoji-sticker-item">🌸</span><span class="emoji-sticker-item">🍄</span><span class="emoji-sticker-item">🦋</span><span class="emoji-sticker-item">🌿</span><span class="emoji-sticker-item">🫖</span><span class="emoji-sticker-item">🐌</span><span class="emoji-sticker-item">🐛</span><span class="emoji-sticker-item">🌼</span><span class="emoji-sticker-item">🍓</span>
+          </div>
+        </div>
+        <div class="sticker-tab-content hidden" id="sticker-tab-vintage">
+          <div class="sticker-emoji-grid">
+            <span class="emoji-sticker-item">📻</span><span class="emoji-sticker-item">📷</span><span class="emoji-sticker-item">🎞️</span><span class="emoji-sticker-item">✉️</span><span class="emoji-sticker-item">🎀</span><span class="emoji-sticker-item">🗝️</span><span class="emoji-sticker-item">🕰️</span><span class="emoji-sticker-item">☎️</span><span class="emoji-sticker-item">✒️</span>
+          </div>
+        </div>
+        <div class="sticker-tab-content hidden" id="sticker-tab-custom">
+          <button id="upload-custom-sticker-btn" class="neo-btn action-btn w-100">UPLOAD STICKER PNG</button>
+          <input type="file" id="custom-sticker-upload" accept="image/*" class="hidden">
+          <div class="image-gallery-grid" id="custom-sticker-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Alert Popover -->
+  <div id="notification-popover" class="notification-popover neo-box hidden">
+    <span class="notification-message" id="notification-text">Saved successfully!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="stickers.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
